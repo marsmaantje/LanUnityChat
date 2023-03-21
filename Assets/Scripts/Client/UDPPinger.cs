@@ -5,11 +5,15 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using UnityEngine;
+using TMPro;
 
 public class UDPPinger : MonoBehaviour
 {
     [SerializeField]
     int UDPPort = 9876;
+
+    [SerializeField]
+    TMP_InputField sendString;
 
     UdpClient _udpClient = new UdpClient();
 
@@ -17,7 +21,7 @@ public class UDPPinger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, UDPPort));
+        _udpClient.EnableBroadcast= true;
     }
 
     // Update is called once per frame
@@ -28,7 +32,7 @@ public class UDPPinger : MonoBehaviour
 
     public void Send()
     {
-        var data = Encoding.UTF8.GetBytes("Test123");
+        var data = Encoding.UTF8.GetBytes(sendString.text);
         _udpClient.Send(data, data.Length, "255.255.255.255", UDPPort);
     }
 }

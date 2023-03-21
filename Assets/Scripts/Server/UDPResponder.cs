@@ -30,7 +30,8 @@ public class UDPResponder : MonoBehaviour
         {
             var fromEndpoint = new IPEndPoint(0, 0);
             var recieveBuffer = _udpClient.Receive(ref fromEndpoint);
-            Debug.Log((recieveBuffer));
+            var data = Encoding.UTF8.GetString(recieveBuffer);
+            Debug.Log("Recieved: " + data);
         }
     }
 }

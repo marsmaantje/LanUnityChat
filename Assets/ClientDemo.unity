@@ -561,6 +561,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: testSend
       objectReference: {fileID: 0}
+    - target: {fileID: 1662546788317000986, guid: f38caf4fbb34c094aa9976cddb688c76, type: 3}
+      propertyPath: m_Text
+      value: TestSend
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38caf4fbb34c094aa9976cddb688c76, type: 3}
 --- !u!1 &189292560
@@ -4018,7 +4022,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66e21f20b56b6434e89a09f5dfaa03b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UDPPort: 55557
+  UDPPort: 55556
+  sendString: {fileID: 1139604252}
 --- !u!4 &1886233184
 Transform:
   m_ObjectHideFlags: 0
@@ -4943,6 +4948,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1041056908}
     m_Modifications:
+    - target: {fileID: 1572366368265030489, guid: 5d242af1a006b8a44858744af77ab539, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1572366368265030494, guid: 5d242af1a006b8a44858744af77ab539, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5030,6 +5039,18 @@ PrefabInstance:
     - target: {fileID: 1572366368265030495, guid: 5d242af1a006b8a44858744af77ab539, type: 3}
       propertyPath: m_Name
       value: txtName
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572366370037328796, guid: 5d242af1a006b8a44858744af77ab539, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572366370037328796, guid: 5d242af1a006b8a44858744af77ab539, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 2150773298
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572366370037328796, guid: 5d242af1a006b8a44858744af77ab539, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d242af1a006b8a44858744af77ab539, type: 3}
