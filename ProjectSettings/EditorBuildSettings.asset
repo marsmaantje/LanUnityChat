@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/PickScreen.unity
+    guid: 6a670c4ae189e364a94c5138a5e5d94f
+  - enabled: 1
+    path: Assets/ClientDemo.unity
+    guid: fff14a687f39a334ca35797269b42372
+  - enabled: 1
+    path: Assets/ServerDemo.unity
+    guid: cae28f9770c6806459c95c4eddf37616
   m_configObjects: {}
