@@ -6,33 +6,38 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 using TMPro;
+using System;
 
-public class UDPPinger : MonoBehaviour
+public class UDPPinger
 {
-    [SerializeField]
-    int UDPPort = 9876;
+    readonly int UDPPort;
 
-    [SerializeField]
-    TMP_InputField sendString;
+    readonly string pingMessage = "ACK";
 
-    UdpClient _udpClient = new UdpClient();
+    readonly UdpClient _udpClient = new UdpClient();
 
+    public System.Action<string> OnMessageReceived;
 
-    // Start is called before the first frame update
-    void Start()
+    public UDPPinger(int port)
     {
-        _udpClient.EnableBroadcast= true;
+        UDPPort = port;
+        _udpClient.EnableBroadcast = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        
+        if (_udpClient.Available > 0)
+        {
+            var remoteEP = new IPEndPoint(IPAddress.Any, 0);
+            var data = _udpClient.Receive(ref remoteEP);
+            var message = Encoding.UTF8.GetString(data);
+            OnMessageReceived?.Invoke(message);
+        }
     }
 
-    public void Send()
+    public void Ping()
     {
-        var data = Encoding.UTF8.GetBytes(sendString.text);
+        var data = Encoding.UTF8.GetBytes(pingMessage);
         _udpClient.Send(data, data.Length, "255.255.255.255", UDPPort);
     }
 }
