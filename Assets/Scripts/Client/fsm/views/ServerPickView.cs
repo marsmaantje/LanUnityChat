@@ -26,11 +26,12 @@ public class ServerPickView : View
         }
     }
     
-    public void AddServer(string address, int port)
+    public ServerAddress AddServer(string address, int port)
     {
         ServerAddress serverAddress = Instantiate(serverListItemPrefab, serverListRoot.transform);
         serverAddress.SetServer(address, port);
         serverAddress.onServerSelected += (a, b) => OnServerConnectRequest?.Invoke(a, b);
+        return serverAddress;
     }
 
     public void ClearServers()

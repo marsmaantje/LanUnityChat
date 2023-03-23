@@ -1,4 +1,5 @@
 ﻿using shared;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +9,14 @@ using UnityEngine;
 public class ServerPickState : ApplicationStateWithView<ServerPickView>
 {
     [SerializeField]    private int _broadcastPort = 0;
+    [SerializeField] private float _broadcastInterval = 0.5f;
+    [SerializeField] private float _broadcastTime = 5.0f;
+    private float _broadcastStartTime;
+    public bool IsSearching => Time.time > _broadcastStartTime + _broadcastTime;
 
     private UDPPinger _udpPinger;
 
+    private Dictionary<string, ServerAddress> _servers = new Dictionary<string, ServerAddress>();
 
     public override void EnterState()
     {
@@ -41,7 +47,28 @@ public class ServerPickState : ApplicationStateWithView<ServerPickView>
     {
         _udpPinger = new UDPPinger(_broadcastPort);
         _udpPinger.OnMessageReceived += OnUDPMessageReceived;
-        _udpPinger.Ping();
+        StartCoroutine(PingCoroutine());
+    }
+
+    /// <summary>
+    /// Start a search for potential servers in our area
+    /// </summary>
+    public void Search()
+    {
+        StartCoroutine(PingCoroutine());
+    }
+
+    /// <summary>
+    /// Do a search for potential servers in our area, it will ping at an interval for a predetermined amount of seconds
+    /// </summary>
+    private IEnumerator PingCoroutine()
+    {
+        _broadcastStartTime = Time.time;
+        while (Time.time - _broadcastStartTime < _broadcastTime)
+        {
+            _udpPinger.Ping();
+            yield return new WaitForSeconds(_broadcastInterval);
+        }
     }
 
     /// //////////////////////////////////////////////////////////////////
@@ -56,6 +83,10 @@ public class ServerPickState : ApplicationStateWithView<ServerPickView>
         _udpPinger.Update();
     }
 
+    /// <summary>
+    /// If we received a response from a server, check if the response is valid and not already in the list, if so, add it to the list of potential servers.
+    /// </summary>
+    /// <param name="message"></param>
     private void OnUDPMessageReceived(string message)
     {
         if (message.StartsWith("ACK"))
@@ -65,9 +96,12 @@ public class ServerPickState : ApplicationStateWithView<ServerPickView>
             {
                 string address = parts[1];
                 int port = int.Parse(parts[2]);
-                view.AddServer(address, port);
+
+                if (!_servers.ContainsKey(address))
+                    _servers.Add(address, view.AddServer(address, port));
             }
         }
+        Debug.Log("wow, we received something back: " + message);
     }
 
     protected override void handleNetworkMessage(ASerializable pMessage)

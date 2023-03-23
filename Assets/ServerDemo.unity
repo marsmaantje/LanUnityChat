@@ -529,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9e2dc42ad6e65a46b1d8e291092aaa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serverPort: 55555
 --- !u!1001 &1408869193
 PrefabInstance:
   m_ObjectHideFlags: 0

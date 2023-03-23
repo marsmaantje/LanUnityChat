@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ServerAddress : MonoBehaviour
 {
     public Button connectButton;
+    [SerializeField]
     private TMP_Text serverAddressText;
+    [SerializeField]
     private TMP_Text serverPortText;
 
     public System.Action<string, int> onServerSelected;

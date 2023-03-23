@@ -7,8 +7,6 @@ using UnityEngine;
  */
 public class LoginState : ApplicationStateWithView<LoginView>
 {
-    [SerializeField]    private string _serverIP = null;
-    [SerializeField]    private int _serverPort = 0;
     [Tooltip("To avoid long iteration times, set this to true while testing.")]
     [SerializeField]    private bool autoConnectWithRandomName = false;
 
@@ -48,7 +46,7 @@ public class LoginState : ApplicationStateWithView<LoginView>
         }
 
         //connect to the server and on success try to join the lobby
-        if (fsm.channel.Connect(_serverIP, _serverPort))
+        if (fsm.channel.Connected)
         {
             tryToJoinLobby();
         } else

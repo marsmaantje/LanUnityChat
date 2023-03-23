@@ -23,11 +23,7 @@ namespace server {
 	 */
 	class TCPGameServer : MonoBehaviour
 	{
-
-		public static void Main(string[] args)
-		{
-			TCPGameServer tcpGameServer = new TCPGameServer();
-		}
+		[SerializeField] private int serverPort = 55555;	//the port we listen on
 
 		//we have 3 different rooms at the moment (aka simple but limited)
 		TcpListener listener;
@@ -42,12 +38,12 @@ namespace server {
 
         private void Start()
         {
-            Log.LogInfo("Starting server on port 55555", this, ConsoleColor.Gray);
+            Log.LogInfo("Starting server on port " + serverPort, this, ConsoleColor.Gray);
 
             //start listening for incoming connections (with max 50 in the queue)
             //we allow for a lot of incoming connections, so we can handle them
             //and tell them whether we will accept them or not instead of bluntly declining them
-            listener = new TcpListener(IPAddress.Any, 55555);
+            listener = new TcpListener(IPAddress.Any, serverPort);
             listener.Start(50);
         }
 
@@ -122,6 +118,36 @@ namespace server {
 		public void RemovePlayerInfo (TcpMessageChannel pClient)
 		{
 			_playerInfo.Remove(pClient);
+		}
+
+		/// <summary>
+		/// Method to get the IP address of the server
+		/// </summary>
+		/// <returns>The IP of the server</returns>
+		public string GetServerAddress()
+		{
+			//get the local IP address
+            IPHostEntry host;
+            string localIP = "";
+            host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
+			{
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+                    localIP = ip.ToString();
+                    break;
+                }
+            }
+            return localIP;
+        }
+
+		/// <summary>
+		/// Method to get the port the server is running on
+		/// </summary>
+		/// <returns>The port of the server</returns>
+		public int GetServerPort()
+		{
+			return serverPort;
 		}
 
 	}

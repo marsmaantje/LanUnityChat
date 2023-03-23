@@ -8,6 +8,9 @@ using UnityEngine;
 using TMPro;
 using System;
 
+/// <summary>
+/// A class used by the CLIENT to broadcast a server request and wait for answers
+/// </summary>
 public class UDPPinger
 {
     readonly int UDPPort;
