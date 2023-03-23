@@ -149,7 +149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598763103535219450, guid: 304630595c750ce4cbad3d93ddecaf86, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 6598763103535219450, guid: 304630595c750ce4cbad3d93ddecaf86, type: 3}
       propertyPath: m_SizeDelta.y
@@ -387,7 +387,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598763103535219450, guid: 304630595c750ce4cbad3d93ddecaf86, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6598763103535219450, guid: 304630595c750ce4cbad3d93ddecaf86, type: 3}
       propertyPath: m_SizeDelta.y
@@ -443,7 +443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598763103535219451, guid: 304630595c750ce4cbad3d93ddecaf86, type: 3}
       propertyPath: m_text
-      value: ServerPort
+      value: Port
       objectReference: {fileID: 0}
     - target: {fileID: 6598763103535219451, guid: 304630595c750ce4cbad3d93ddecaf86, type: 3}
       propertyPath: m_TextStyleHashCode
