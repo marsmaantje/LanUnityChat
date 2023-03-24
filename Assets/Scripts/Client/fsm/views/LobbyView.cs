@@ -14,6 +14,7 @@ public class LobbyView : View
     [SerializeField] private Text _textOutput = null;
     [SerializeField] private ScrollRect _scrollRect = null;
     [SerializeField] private Toggle _toggleReady = null;
+    [SerializeField] private Image receivedImageDisplay;
 
     private bool _focusedRequested = false;     //weird unity stuff as usual ;)
     private bool _scrollRequested = false;      //weird unity stuff as usual ;)
@@ -85,6 +86,11 @@ public class LobbyView : View
     public void SetReadyToggle (bool pValue)
     {
         _toggleReady.SetIsOnWithoutNotify(pValue);
+    }
+
+    public void SetImage(Texture2D newImage)
+    {
+        receivedImageDisplay.sprite = Sprite.Create(newImage, new Rect(0, 0, newImage.width, newImage.height), Vector2.zero);
     }
 
 }

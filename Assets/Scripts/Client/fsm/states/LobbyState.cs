@@ -49,6 +49,17 @@ public class LobbyState : ApplicationStateWithView<LobbyView>
         //addOutput("(noone else will see this because I broke the chat on purpose):"+pText);        
     }
 
+    public void SendImage(Texture2D image)
+    {
+        if (image != null)
+        {
+            byte[] bytes = image.EncodeToPNG();
+            ImageMessage message = new ImageMessage();
+            message.data = bytes;
+            fsm.channel.SendMessage(message);
+        }
+    }
+
     /**
      * Called when you click on the ready checkbox
      */
@@ -75,15 +86,27 @@ public class LobbyState : ApplicationStateWithView<LobbyView>
     
     protected override void handleNetworkMessage(ASerializable pMessage)
     {
-        if (pMessage is ChatMessage) handleChatMessage(pMessage as ChatMessage);
-        else if (pMessage is RoomJoinedEvent) handleRoomJoinedEvent(pMessage as RoomJoinedEvent);
-        else if (pMessage is LobbyInfoUpdate) handleLobbyInfoUpdate(pMessage as LobbyInfoUpdate);
+        switch(pMessage)
+        {
+            case ChatMessage msg: handleChatMessage(msg); break;
+            case ImageMessage msg: handleImageMessage(msg); break;
+            case RoomJoinedEvent msg: handleRoomJoinedEvent(msg); break;
+            case LobbyInfoUpdate msg: handleLobbyInfoUpdate(msg); break;
+        }
     }
 
     private void handleChatMessage(ChatMessage pMessage)
     {
         //just show the message
         addOutput(pMessage.message);
+    }
+
+    private void handleImageMessage(ImageMessage pMessage)
+    {
+        //decode the image again
+        Texture2D decodedTexture = new Texture2D(2, 2);
+        decodedTexture.LoadImage(pMessage.data);
+        view.SetImage(decodedTexture);
     }
 
     private void handleRoomJoinedEvent(RoomJoinedEvent pMessage)

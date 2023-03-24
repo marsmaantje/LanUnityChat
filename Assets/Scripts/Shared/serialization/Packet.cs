@@ -32,9 +32,10 @@ namespace shared
 
 		/// WRITE METHODS
 
-		public void Write (int pInt)							{		writer.Write(pInt);			}
-		public void Write (string pString)						{		writer.Write(pString);		}
-		public void Write (bool pBool)							{		writer.Write(pBool);		}
+		public void Write (int pInt) => writer.Write(pInt);
+		public void Write (string pString) => writer.Write(pString);
+		public void Write(bool pBool) => writer.Write(pBool);
+		public void Write(byte[] pBytes) { writer.Write(pBytes.Length); writer.Write(pBytes); }
 		
 		public void Write (ASerializable pSerializable)			{
 			//write the full classname into the stream first
@@ -45,9 +46,10 @@ namespace shared
 
 		/// READ METHODS
 
-		public int ReadInt() { return reader.ReadInt32(); }
-		public string ReadString() { return reader.ReadString(); }
-		public bool ReadBool() { return reader.ReadBoolean(); }
+		public int ReadInt() => reader.ReadInt32();
+		public string ReadString() => reader.ReadString();
+		public bool ReadBool() => reader.ReadBoolean();
+		public byte[] ReadBytes() => reader.ReadBytes(ReadInt());
 
 		public ASerializable ReadObject() 
 		{
