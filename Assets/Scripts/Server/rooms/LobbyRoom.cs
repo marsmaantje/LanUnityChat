@@ -1,5 +1,7 @@
 ﻿using shared;
 using System.Collections.Generic;
+using System.Diagnostics;
+using UnityEngine;
 
 namespace server
 {
@@ -53,7 +55,8 @@ namespace server
 
 		protected override void handleNetworkMessage(ASerializable pMessage, TcpMessageChannel pSender)
 		{
-			switch(pMessage)
+			UnityEngine.Debug.Log($"LobbyRoom received message from {pSender}: {pMessage.GetType().Name}");
+            switch (pMessage)
 			{
                 case ChangeReadyStatusRequest readyNotification:
                     handleReadyNotification(readyNotification, pSender);
@@ -61,8 +64,11 @@ namespace server
                 case ChatMessage chatMessage:
                     handleChatMessage(chatMessage, pSender);
                     break;
-				default:
+				case ImageMessage imageMessage:
+					handleImageMessage(imageMessage, pSender);
 					break;
+				default:
+                    break;
             }
 		}
 
@@ -99,6 +105,15 @@ namespace server
             //add the client name to the beginning of the message
             pMessage.message = $"{_server.GetPlayerInfo(pSender).Name}: {pMessage.message}";
 
+            //send the message to all clients in the lobby
+            sendToAll(pMessage);
+        }
+
+		private void handleImageMessage(ImageMessage pMessage, TcpMessageChannel pSender)
+        {
+            Log.LogInfo($"Received image message from {pSender}", this, System.ConsoleColor.Green);
+            //add the client name to the beginning of the message
+            //pMessage.senderName = _server.GetPlayerInfo(pSender).Name;
             //send the message to all clients in the lobby
             sendToAll(pMessage);
         }

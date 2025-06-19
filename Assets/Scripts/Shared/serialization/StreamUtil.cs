@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Sockets;
 
 namespace shared
@@ -18,17 +20,20 @@ namespace shared
 	public static class StreamUtil
 	{
 		private const int HEADER_SIZE = 4;
+		private static Dictionary<TcpClient, byte[]> bufferedData = new Dictionary<TcpClient, byte[]>();
+		private static Dictionary<TcpClient, int> remainingMessageSize = new Dictionary<TcpClient, int>();
 
-		/**
+        /**
 		 * Optimized 'Available' check that FIRST checks if header data is available and THEN checks 
 		 * if the actual data is available as well.
 		 */
-		public static bool Available(TcpClient pClient)
+        public static bool Available(TcpClient pClient)
 		{
 			if (pClient.Available < HEADER_SIZE) return false;
 			byte[] sizeHeader = new byte[HEADER_SIZE];
 			pClient.Client.Receive(sizeHeader, HEADER_SIZE, SocketFlags.Peek);
 			int messageSize = BitConverter.ToInt32(sizeHeader, 0);
+			if (messageSize > 65536) return true; //HACK: makes sending messages bigger than 16 biut int limit possible, but will lock the client while waiting to receive it all
 			return pClient.Available >= HEADER_SIZE + messageSize;
 		}
 
@@ -37,8 +42,9 @@ namespace shared
 		 */
 		public static void Write(NetworkStream pStream, byte[] pMessage)
 		{
-			//convert message length to 4 bytes and write those bytes into the stream
-			pStream.Write(BitConverter.GetBytes(pMessage.Length), 0, HEADER_SIZE);
+			UnityEngine.Debug.Log($"Writing {pMessage.Length} bytes to stream");
+            //convert message length to 4 bytes and write those bytes into the stream
+            pStream.Write(BitConverter.GetBytes(pMessage.Length), 0, HEADER_SIZE);
 			//now send the bytes of the message themselves
 			pStream.Write(pMessage, 0, pMessage.Length);
 		}
@@ -77,7 +83,10 @@ namespace shared
 					totalBytesRead += bytesRead;
 				}
 			}
-			catch { }
+			catch (Exception e)
+			{
+				Log.LogInfo("Error reading from stream: " + e.ToString(), ConsoleColor.Red);
+            }
 
 			return (totalBytesRead == pByteCount) ? bytes : null;
 		}

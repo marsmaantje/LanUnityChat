@@ -8,6 +8,7 @@ public class LobbyState : ApplicationStateWithView<LobbyView>
 {
     [Tooltip("Should we enter the lobby in a ready state or not?")]
     [SerializeField] private bool autoQueueForGame = false;
+    [SerializeField] private Texture2D testImage = null; //for testing purposes, you can set this in the inspector
 
     public override void EnterState()
     {
@@ -20,6 +21,7 @@ public class LobbyState : ApplicationStateWithView<LobbyView>
 
         view.OnChatTextEntered += onTextEntered;
         view.OnReadyToggleClicked += onReadyToggleClicked;
+        view.OnTestImageButtonClicked += OnSendImageButtonClicked;
 
         if (autoQueueForGame)
         {
@@ -33,6 +35,7 @@ public class LobbyState : ApplicationStateWithView<LobbyView>
         
         view.OnChatTextEntered -= onTextEntered;
         view.OnReadyToggleClicked -= onReadyToggleClicked;
+        view.OnTestImageButtonClicked -= OnSendImageButtonClicked;
     }
 
     /**
@@ -47,6 +50,22 @@ public class LobbyState : ApplicationStateWithView<LobbyView>
         fsm.channel.SendMessage(msg);
 
         //addOutput("(noone else will see this because I broke the chat on purpose):"+pText);        
+    }
+
+    /**
+     * Called when you click the send image button
+     */
+    public void OnSendImageButtonClicked()
+    {
+        //for testing purposes, we will send a test image
+        if (testImage != null)
+        {
+            SendImage(testImage);
+        }
+        else
+        {
+            addOutput("No test image found in Resources/test_image.png");
+        }
     }
 
     public void SendImage(Texture2D image)
@@ -86,7 +105,8 @@ public class LobbyState : ApplicationStateWithView<LobbyView>
     
     protected override void handleNetworkMessage(ASerializable pMessage)
     {
-        switch(pMessage)
+        Debug.Log("LobbyState received message: " + pMessage.GetType().Name);
+        switch (pMessage)
         {
             case ChatMessage msg: handleChatMessage(msg); break;
             case ImageMessage msg: handleImageMessage(msg); break;

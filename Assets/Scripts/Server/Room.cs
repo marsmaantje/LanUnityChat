@@ -121,7 +121,8 @@ namespace server
 		{
 			while (pMember.HasMessage())
 			{
-				handleNetworkMessage(pMember.ReceiveMessage(), pMember);
+				Log.LogInfo("Processing message from " + pMember.GetRemoteEndPoint(), this);
+                handleNetworkMessage(pMember.ReceiveMessage(), pMember);
 			}
 		}
 
